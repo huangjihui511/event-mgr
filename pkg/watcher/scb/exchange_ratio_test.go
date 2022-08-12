@@ -10,7 +10,7 @@ import (
 
 var _ = Describe("api", func() {
 	Context("Works", func() {
-		err := ExchangeRatioWatcher{}.Trigger(context.TODO()).Error()
+		err := ExchangeRatioWatcher{}.Call(context.TODO()).Error()
 		Expect(err).NotTo(HaveOccurred())
 	})
 })

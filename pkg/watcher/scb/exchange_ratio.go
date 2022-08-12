@@ -15,10 +15,11 @@ type ExchangeRatioWatcher struct {
 
 type ExchangeRatioResult struct {
 	ExchangeRatio
-	err error
+	isNotify bool
+	err      error
 }
 
-func (_ ExchangeRatioWatcher) Trigger(ctx context.Context) watcherInterface.ResultInterface {
+func (_ ExchangeRatioWatcher) Call(ctx context.Context) watcherInterface.ResultInterface {
 	ex, err := getSCExchangeRatio(ctx)
 	return ExchangeRatioResult{
 		ExchangeRatio: ex,
@@ -32,4 +33,8 @@ func (e ExchangeRatioResult) Error() error {
 
 func (e ExchangeRatioResult) String() string {
 	panic("im")
+}
+
+func (e ExchangeRatioResult) IsNotify() bool {
+	return false
 }
