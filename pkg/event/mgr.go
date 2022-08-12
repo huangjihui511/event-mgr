@@ -3,6 +3,8 @@ package event
 import (
 	"context"
 	eventInterface "huangjihui511/event-mgr/pkg/event/event_interface"
+	"huangjihui511/event-mgr/pkg/logs"
+	"huangjihui511/event-mgr/pkg/notify"
 	"huangjihui511/event-mgr/pkg/watcher/scb"
 	"time"
 )
@@ -11,28 +13,38 @@ var (
 	events []eventInterface.Interface
 )
 
-func StartMgr() {
+func StartMgr(ctx context.Context) {
 	registerEvents()
-	startEvents()
+	startEvents(ctx)
 }
 
 func registerEvents() {
 	events = []eventInterface.Interface{
 		Timer{
-			watcherInterface: scb.ExchangeRatioWatcher{},
-			duration:         time.Second * 5,
+			watcherInterface: scb.ExchangeRatioWatcher{
+				Name_: "scb watcher",
+			},
+			duration: time.Second * 5,
 		},
 	}
 }
 
-func startEvents() {
+func startEvents(ctx context.Context) {
 	for _, e := range events {
 		go func(ev eventInterface.Interface) {
 			c := ev.Chan()
-			for range c {
-				r := ev.Watcher().Call(context.TODO())
-				if !r.IsNotify() {
-					continue
+			for {
+				select {
+				case <-c:
+					logs.Logger.Infof("Call watcher %s", ev.Watcher().Name())
+					r := ev.Watcher().Call(ctx)
+					if !r.IsNotify() {
+						continue
+					}
+					notify.SendToEmail(r.Subject(), r.Info())
+				case <-ctx.Done():
+					logs.Logger.Infof("Stop watcher %s", ev.Watcher().Name())
+					return
 				}
 			}
 		}(e)

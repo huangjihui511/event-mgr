@@ -9,7 +9,7 @@ import (
 
 var _ = Describe("Email", func() {
 	Context("Work", func() {
-		err := SendToEmail("717655909@qq.com", "test", emailMetaQQ, "test", "this is test")
+		err := SendToEmail("test", "this is test")
 		Expect(err).NotTo(HaveOccurred())
 	})
 })

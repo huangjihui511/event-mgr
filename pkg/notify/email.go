@@ -24,14 +24,14 @@ var (
 	}
 	emailMetaQQ = emailMeta{
 		user:     "717655909@qq.com",
-		name:     "jh",
+		name:     "notify robot",
 		password: "!@#qweasd",
 		host:     "smtp.qq.com:587",
 	}
 )
 
-func SendToEmail(toEmail, toName string, senderEmail emailMeta, subject, body string) error {
-	return sendToEmail2(toEmail, toName, senderEmail, subject, body)
+func SendToEmail(subject, body string) error {
+	return sendToEmail2("717655909@qq.com", "jh", emailMetaQQ, subject, body)
 }
 
 func sendToEmail(toEmail, toName string, senderEmail emailMeta, subject, body string) error {

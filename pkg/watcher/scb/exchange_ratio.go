@@ -2,6 +2,7 @@ package scb
 
 import (
 	"context"
+	"fmt"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
 )
 
@@ -11,6 +12,7 @@ var (
 )
 
 type ExchangeRatioWatcher struct {
+	Name_ string
 }
 
 type ExchangeRatioResult struct {
@@ -27,14 +29,22 @@ func (_ ExchangeRatioWatcher) Call(ctx context.Context) watcherInterface.ResultI
 	}
 }
 
+func (e ExchangeRatioWatcher) Name() string {
+	return e.Name_
+}
+
 func (e ExchangeRatioResult) Error() error {
 	return e.err
 }
 
-func (e ExchangeRatioResult) String() string {
-	panic("im")
+func (e ExchangeRatioResult) Info() string {
+	return fmt.Sprintf("%+v\n", e)
+}
+
+func (e ExchangeRatioResult) Subject() string {
+	return "ExchangeRatioResult"
 }
 
 func (e ExchangeRatioResult) IsNotify() bool {
-	return false
+	return true
 }

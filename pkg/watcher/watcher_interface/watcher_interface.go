@@ -4,10 +4,12 @@ import "context"
 
 type Interface interface {
 	Call(ctx context.Context) ResultInterface
+	Name() string
 }
 
 type ResultInterface interface {
 	Error() error
-	String() string
+	Info() string
 	IsNotify() bool
+	Subject() string
 }
