@@ -1,6 +1,8 @@
 package service
 
 import (
+	"bytes"
+	"html/template"
 	"net/http"
 	"os"
 
@@ -16,7 +18,11 @@ func startEcho() {
 	e.Use(middleware.Recover())
 
 	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "Hello, jihui-event-mgr! 8.13.14")
+		t := template.Must(template.ParseGlob("./template/index.tmp"))
+		b := make([]byte, 0)
+		buf := bytes.NewBuffer(b)
+		t.Execute(buf, nil)
+		return c.HTML(http.StatusOK, string(buf.Bytes()))
 	})
 
 	e.GET("/ping", func(c echo.Context) error {
