@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"huangjihui511/event-mgr/pkg"
+	"huangjihui511/event-mgr/pkg/service"
 
 	"github.com/spf13/cobra"
 )
@@ -12,6 +12,6 @@ var RootCmd = &cobra.Command{
 	Short: "event service",
 	Long:  `event service`,
 	Run: func(cmd *cobra.Command, args []string) {
-		pkg.StartService()
+		service.StartService()
 	},
 }
