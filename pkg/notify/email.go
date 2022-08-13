@@ -1,57 +1,32 @@
 package notify
 
 import (
-	"net/smtp"
+	notifyInterface "huangjihui511/event-mgr/pkg/notify/interfaces"
 	"strings"
 
 	gomail "gopkg.in/gomail.v2"
 )
 
-type emailMeta struct {
-	user     string
-	name     string
-	password string
-	host     string
+var _ notifyInterface.EmailInterface = EmailSender{}
+
+type EmailSender struct {
+	notifyInterface.EmailMeta
 }
 
-var (
-	emailMeta163 = emailMeta{
-		user: "billEventRobot@163.com",
-		name: "jh",
-		// password: "0sB-7M2-3im-Fpm",
-		password: "WVJZOZWLIMGDCEUGmermaid",
-		host:     "smtp.163.com:587",
-	}
-	emailMetaQQ = emailMeta{
-		user:     "717655909@qq.com",
-		name:     "notify robot",
-		password: "!@#qweasd",
-		host:     "smtp.qq.com:587",
-	}
-)
-
-func SendToEmail(subject, body string) error {
-	return sendToEmail2("717655909@qq.com", "jh", emailMetaQQ, subject, body)
+// Send implements notifyInterface.EmailInterface
+func (e EmailSender) Send(to string, subject string, body string) error {
+	return sendToEmail2("717655909@qq.com", "jh", e.EmailMeta, subject, body)
 }
 
-func sendToEmail(toEmail, toName string, senderEmail emailMeta, subject, body string) error {
-	auth := smtp.PlainAuth("", senderEmail.user, senderEmail.password, senderEmail.host)
-	contentType := "Content-Type: multipart/alternative; "
-	msg := []byte("To: " + toEmail + "\r\nFrom: " + senderEmail.name + "<" + senderEmail.user + ">" + "\r\nSubject: " + subject + "\r\n" + contentType + "\r\n\r\n" + body)
-	send_to := strings.Split(toEmail, ";")
-	err := smtp.SendMail(senderEmail.host, auth, senderEmail.user, send_to, msg)
-	return err
-}
-
-func sendToEmail2(toEmail, toName string, senderEmail emailMeta, subject, body string) error {
+func sendToEmail2(toEmail, toName string, senderEmail notifyInterface.EmailMeta, subject, body string) error {
 	msg := gomail.NewMessage()
-	msg.SetHeader("From", senderEmail.user)
+	msg.SetHeader("From", senderEmail.User)
 	msg.SetHeader("To", toEmail)
 	msg.SetHeader("Subject", subject)
 	msg.SetBody("text/html", body)
 	// msg.Attach("/home/User/cat.jpg")
 
-	n := gomail.NewDialer(strings.Split(senderEmail.host, ":")[0], 587, senderEmail.user, senderEmail.password)
+	n := gomail.NewDialer(strings.Split(senderEmail.Host, ":")[0], 587, senderEmail.User, senderEmail.Password)
 
 	// Send the email
 	if err := n.DialAndSend(msg); err != nil {

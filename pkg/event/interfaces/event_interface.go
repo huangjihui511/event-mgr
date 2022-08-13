@@ -1,4 +1,4 @@
-package eventInterface
+package interfaces
 
 import (
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"

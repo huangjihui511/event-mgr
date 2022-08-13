@@ -1,7 +1,7 @@
 package event
 
 import (
-	eventInterface "huangjihui511/event-mgr/pkg/event/event_interface"
+	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
 	"sync"
 	"time"

@@ -2,15 +2,22 @@ package event
 
 import (
 	"context"
-	eventInterface "huangjihui511/event-mgr/pkg/event/event_interface"
+	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	"huangjihui511/event-mgr/pkg/logs"
 	"huangjihui511/event-mgr/pkg/notify"
+	notifyInterface "huangjihui511/event-mgr/pkg/notify/interfaces"
 	"huangjihui511/event-mgr/pkg/watcher/scb"
 	"time"
 )
 
 var (
-	events []eventInterface.Interface
+	events      []eventInterface.Interface
+	notifyEmail = notify.EmailSender{
+		notifyInterface.EmailMetaQQ,
+	}
+	targetEmails = []string{
+		"717655909@qq.com",
+	}
 )
 
 func StartMgr(ctx context.Context) {
@@ -50,7 +57,12 @@ func startEvents(ctx context.Context) {
 					if !r.IsNotify() {
 						continue
 					}
-					notify.SendToEmail(r.Subject(), r.Msg())
+					for _, t := range targetEmails {
+						err := notifyEmail.Send(t, r.Subject(), r.Msg())
+						if err != nil {
+							logs.Logger.Errorf("send email to %v failed: %s", t, err)
+						}
+					}
 				case <-ctx.Done():
 					logs.Logger.Infof("Stop watcher %s", ev.Watcher().Name())
 					return

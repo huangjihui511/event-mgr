@@ -9,8 +9,7 @@ import (
 
 var _ = Describe("Email", func() {
 	Context("Work", func() {
-		err := SendToEmail("test", "this is test")
-		Expect(err).NotTo(HaveOccurred())
+
 	})
 })
 
