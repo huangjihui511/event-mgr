@@ -3,8 +3,8 @@ package scb
 import (
 	"context"
 	"fmt"
+	"huangjihui511/event-mgr/pkg/utils"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
-	"time"
 )
 
 var (
@@ -23,12 +23,12 @@ type ResultExchangeRatio struct {
 	msg      string
 }
 
-func (_ WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
+func (WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
 	ex, err := getSCExchangeRatio(ctx)
 	return ResultExchangeRatio{
 		ExchangeRatio: ex,
 		err:           err,
-		isNotify:      isSCBMarketOpen(time.Now()),
+		isNotify:      isSCBMarketOpen(utils.TimeNow()),
 		msg:           fmt.Sprintf("Hi Boss! The buy ratio right now is %v, sell ratio is %v~", ex.BuyRatio, ex.SellRatio),
 	}
 }

@@ -3,8 +3,8 @@ package scb
 import (
 	"context"
 	"fmt"
+	"huangjihui511/event-mgr/pkg/utils"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
-	"time"
 )
 
 var (
@@ -20,7 +20,7 @@ type WatcherExchangeRatioLowerBuyRatio struct {
 func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
 	ex, err := getSCExchangeRatio(ctx)
 	isNotify := false
-	if ex.BuyRatio < w.LowBoundRatio && isSCBMarketOpen(time.Now()) {
+	if ex.BuyRatio < w.LowBoundRatio && isSCBMarketOpen(utils.TimeNow()) {
 		isNotify = true
 	}
 	return ResultExchangeRatioLowerBuyRatio{

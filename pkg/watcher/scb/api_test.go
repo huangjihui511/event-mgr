@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
@@ -17,25 +17,25 @@ var _ = Describe("api", func() {
 		Expect(ratio.SellRatio).ShouldNot(BeZero())
 	})
 	Context("Works time", func() {
-		When("open", func() {
+		It("open", func() {
 			in, err := time.Parse(time.RFC3339, "2022-08-12T15:04:05Z")
 			Expect(err).NotTo(HaveOccurred())
 			r := isSCBMarketOpen(in)
 			Expect(r).To(Equal(true))
 		})
-		When("not open 0", func() {
+		It("not open 0", func() {
 			in, err := time.Parse(time.RFC3339, "2022-08-12T9:04:05Z")
 			Expect(err).NotTo(HaveOccurred())
 			r := isSCBMarketOpen(in)
 			Expect(r).To(Equal(false))
 		})
-		When("not open 1", func() {
+		It("not open 1", func() {
 			in, err := time.Parse(time.RFC3339, "2022-08-12T18:04:05Z")
 			Expect(err).NotTo(HaveOccurred())
 			r := isSCBMarketOpen(in)
 			Expect(r).To(Equal(false))
 		})
-		When("not open 2", func() {
+		It("not open 2", func() {
 			in, err := time.Parse(time.RFC3339, "2022-08-13T10:04:05Z")
 			Expect(err).NotTo(HaveOccurred())
 			r := isSCBMarketOpen(in)

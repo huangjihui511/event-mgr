@@ -80,7 +80,7 @@ func isSCBMarketOpen(now time.Time) bool {
 	if weekday == time.Saturday || weekday == time.Sunday {
 		return false
 	}
-	if hour < 9 || hour > 6+12 {
+	if hour < 9 || hour >= 6+12 {
 		return false
 	}
 	if hour == 9 && minute < 30 {

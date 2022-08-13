@@ -11,14 +11,18 @@ import (
 )
 
 var (
-	events      []eventInterface.Interface
-	notifyEmail = notify.EmailSender{
-		notifyInterface.EmailMetaQQ,
-	}
+	events       []eventInterface.Interface
+	notifyEmail  notifyInterface.EmailInterface
 	targetEmails = []string{
 		"717655909@qq.com",
 	}
 )
+
+func init() {
+	notifyEmail = notify.EmailSender{
+		EmailMeta: notifyInterface.EmailMetaQQ,
+	}
+}
 
 func StartMgr(ctx context.Context) {
 	registerEvents()
@@ -49,20 +53,24 @@ func startEvents(ctx context.Context) {
 	for _, e := range events {
 		go func(ev eventInterface.Interface) {
 			c := ev.Chan()
+			do := func() {
+				logs.Logger.Infof("Call watcher %s", ev.Watcher().Name())
+				r := ev.Watcher().Call(ctx)
+				if !r.IsNotify() {
+					return
+				}
+				for _, t := range targetEmails {
+					err := notifyEmail.Send(t, r.Subject(), r.Msg())
+					if err != nil {
+						logs.Logger.Errorf("send email to %v failed: %s", t, err)
+					}
+				}
+			}
+			do()
 			for {
 				select {
 				case <-c:
-					logs.Logger.Infof("Call watcher %s", ev.Watcher().Name())
-					r := ev.Watcher().Call(ctx)
-					if !r.IsNotify() {
-						continue
-					}
-					for _, t := range targetEmails {
-						err := notifyEmail.Send(t, r.Subject(), r.Msg())
-						if err != nil {
-							logs.Logger.Errorf("send email to %v failed: %s", t, err)
-						}
-					}
+					do()
 				case <-ctx.Done():
 					logs.Logger.Infof("Stop watcher %s", ev.Watcher().Name())
 					return
