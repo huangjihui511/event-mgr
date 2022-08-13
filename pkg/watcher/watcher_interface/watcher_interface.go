@@ -9,7 +9,7 @@ type Interface interface {
 
 type ResultInterface interface {
 	Error() error
-	Info() string
+	Msg() string
 	IsNotify() bool
 	Subject() string
 }

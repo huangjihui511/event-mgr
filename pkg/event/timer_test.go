@@ -12,7 +12,7 @@ import (
 var _ = Describe("Timer", func() {
 	Context("Channel", func() {
 		tt := Timer{
-			watcherInterface: scb.ExchangeRatioWatcher{},
+			watcherInterface: scb.WatcherExchangeRatio{},
 			duration:         time.Second * 5,
 		}
 		c := tt.Chan()

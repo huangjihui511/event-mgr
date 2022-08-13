@@ -3,7 +3,6 @@ module huangjihui511/event-mgr
 go 1.18
 
 require (
-	github.com/go-delve/delve v1.9.0
 	github.com/labstack/echo/v4 v4.8.0
 	github.com/onsi/ginkgo/v2 v2.1.4
 	github.com/onsi/gomega v1.20.0

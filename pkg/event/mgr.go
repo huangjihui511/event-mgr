@@ -21,10 +21,19 @@ func StartMgr(ctx context.Context) {
 func registerEvents() {
 	events = []eventInterface.Interface{
 		Timer{
-			watcherInterface: scb.ExchangeRatioWatcher{
+			watcherInterface: scb.WatcherExchangeRatio{
 				Name_: "scb watcher",
 			},
-			duration: time.Second * 5,
+			duration: time.Minute * 30,
+		},
+		Timer{
+			watcherInterface: scb.WatcherExchangeRatioLowerBuyRatio{
+				WatcherExchangeRatio: scb.WatcherExchangeRatio{
+					Name_: "scb watcher",
+				},
+				LowBoundRatio: 6.78,
+			},
+			duration: time.Second * 1,
 		},
 	}
 }
@@ -41,7 +50,7 @@ func startEvents(ctx context.Context) {
 					if !r.IsNotify() {
 						continue
 					}
-					notify.SendToEmail(r.Subject(), r.Info())
+					notify.SendToEmail(r.Subject(), r.Msg())
 				case <-ctx.Done():
 					logs.Logger.Infof("Stop watcher %s", ev.Watcher().Name())
 					return

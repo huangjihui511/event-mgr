@@ -16,7 +16,7 @@ func startEcho() {
 	e.Use(middleware.Recover())
 
 	e.GET("/", func(c echo.Context) error {
-		return c.HTML(http.StatusOK, "Hello, jihui-event-mgr! <3")
+		return c.HTML(http.StatusOK, "Hello, jihui-event-mgr! 8.13.14")
 	})
 
 	e.GET("/ping", func(c echo.Context) error {
