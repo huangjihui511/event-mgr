@@ -27,7 +27,7 @@ func (_ WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultI
 	return ResultExchangeRatio{
 		ExchangeRatio: ex,
 		err:           err,
-		msg:           fmt.Sprintf("Hi Boss! The sell ratio right now is %v, buy ratio is %v~", ex.BuyRatio, ex.SellRatio),
+		msg:           fmt.Sprintf("Hi Boss! The buy ratio right now is %v, sell ratio is %v~", ex.BuyRatio, ex.SellRatio),
 	}
 }
 

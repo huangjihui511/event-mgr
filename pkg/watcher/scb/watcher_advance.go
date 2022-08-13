@@ -27,7 +27,7 @@ func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInte
 			ExchangeRatio: ex,
 			err:           err,
 			isNotify:      isNotify,
-			msg:           fmt.Sprintf("Hi Boss! The sell ratio right now is %v, lower than the bound %v~", ex.BuyRatio, w.LowBoundRatio),
+			msg:           fmt.Sprintf("Hi Boss! The buy ratio right now is %v, lower than the bound %v~", ex.BuyRatio, w.LowBoundRatio),
 		},
 	}
 }
