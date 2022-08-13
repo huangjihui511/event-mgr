@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
+	"time"
 )
 
 var (
@@ -27,6 +28,7 @@ func (_ WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultI
 	return ResultExchangeRatio{
 		ExchangeRatio: ex,
 		err:           err,
+		isNotify:      isSCBMarketOpen(time.Now()),
 		msg:           fmt.Sprintf("Hi Boss! The buy ratio right now is %v, sell ratio is %v~", ex.BuyRatio, ex.SellRatio),
 	}
 }
@@ -48,5 +50,5 @@ func (e ResultExchangeRatio) Subject() string {
 }
 
 func (e ResultExchangeRatio) IsNotify() bool {
-	return true
+	return e.isNotify
 }

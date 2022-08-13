@@ -33,7 +33,7 @@ func registerEvents() {
 				},
 				LowBoundRatio: 6.78,
 			},
-			duration: time.Second * 1,
+			duration: time.Minute,
 		},
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
+	"time"
 )
 
 var (
@@ -19,7 +20,7 @@ type WatcherExchangeRatioLowerBuyRatio struct {
 func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
 	ex, err := getSCExchangeRatio(ctx)
 	isNotify := false
-	if ex.BuyRatio < w.LowBoundRatio {
+	if ex.BuyRatio < w.LowBoundRatio && isSCBMarketOpen(time.Now()) {
 		isNotify = true
 	}
 	return ResultExchangeRatioLowerBuyRatio{

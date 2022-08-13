@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var headerMap = map[string]string{
@@ -70,4 +71,20 @@ func getSCExchangeRatio(ctx context.Context) (exchangeRatio ExchangeRatio, err e
 	exchangeRatio.SellRatio, err = strconv.ParseFloat(respUnmarshal.USDCNY.BidSpotRate, 64)
 	logs.Logger.Printf("Get rate from SC Bank: %+v", exchangeRatio)
 	return
+}
+
+func isSCBMarketOpen(now time.Time) bool {
+	weekday := now.Weekday()
+	hour := now.Hour()
+	minute := now.Minute()
+	if weekday == time.Saturday || weekday == time.Sunday {
+		return false
+	}
+	if hour < 9 || hour > 6+12 {
+		return false
+	}
+	if hour == 9 && minute < 30 {
+		return false
+	}
+	return true
 }

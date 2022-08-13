@@ -2,7 +2,6 @@ package scb
 
 import (
 	"context"
-	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -14,6 +13,3 @@ var _ = Describe("api", func() {
 		Expect(err).NotTo(HaveOccurred())
 	})
 })
-
-func TestResultExchangeRatio_Error(t *testing.T) {
-}
