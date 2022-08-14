@@ -2,6 +2,7 @@ package event
 
 import (
 	"context"
+	"fmt"
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	"huangjihui511/event-mgr/pkg/logs"
 	"huangjihui511/event-mgr/pkg/notify"
@@ -43,8 +44,9 @@ func do(ctx context.Context, ev eventInterface.Interface) {
 	if !r.IsNotify() {
 		return
 	}
+	subject := fmt.Sprintf("%v: \"%v\"", ev.Watcher().Name(), r.Subject())
 	for _, t := range targetEmails {
-		err := notifyEmail.Send(t, r.Subject(), r.Msg())
+		err := notifyEmail.Send(t, subject, r.Msg())
 		if err != nil {
 			logs.Logger.Errorf("send email to %v failed: %s", t, err)
 		}

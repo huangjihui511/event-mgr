@@ -27,8 +27,8 @@ func (w *WatcherBorn) Call(ctx context.Context) watcherInterface.ResultInterface
 	return watcherInterface.ResultBase{
 		IsNotify_: isNotify,
 		Err:       nil,
-		Msg_:      "Thanks you give me a new live",
-		Subject_:  "Updated",
+		Msg_:      "Thanks you for giving me a new life",
+		Subject_:  "system updated",
 	}
 
 }

@@ -30,7 +30,7 @@ func (WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInt
 		Err:       err,
 		IsNotify_: isSCBMarketOpen(utils.TimeNow()),
 		Msg_:      fmt.Sprintf("Hi Boss! The buy ratio right now is %v, sell ratio is %v~", ex.BuyRatio, ex.SellRatio),
-		Subject_:  "ResultExchangeRatio",
+		Subject_:  "get new ratio",
 	}
 }
 
@@ -58,6 +58,6 @@ func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInte
 		Err:       err,
 		IsNotify_: isNotify,
 		Msg_:      fmt.Sprintf("Hi Boss! The buy ratio right now is %v, lower than the bound %v~", ex.BuyRatio, w.LowBoundRatio),
-		Subject_:  "ResultExchangeRatioLowerBuyRatio",
+		Subject_:  "buy ratio changed",
 	}
 }
