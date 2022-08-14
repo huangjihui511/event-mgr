@@ -1,4 +1,4 @@
-package watcherInterface
+package interfaces
 
 import "context"
 

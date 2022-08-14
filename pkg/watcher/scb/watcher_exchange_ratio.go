@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"huangjihui511/event-mgr/pkg/utils"
-	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
+	watcherInterface "huangjihui511/event-mgr/pkg/watcher/interfaces"
 )
 
 var (
@@ -14,6 +14,14 @@ var (
 
 type WatcherExchangeRatio struct {
 	watcherInterface.WatcherBase
+}
+
+func NewWatcherExchangeRatio(name string) watcherInterface.Interface {
+	return WatcherExchangeRatio{
+		watcherInterface.WatcherBase{
+			Name_: name,
+		},
+	}
 }
 
 func (WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
@@ -29,6 +37,15 @@ func (WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInt
 type WatcherExchangeRatioLowerBuyRatio struct {
 	watcherInterface.WatcherBase
 	LowBoundRatio float64
+}
+
+func NewWatcherExchangeRatioLowerBuyRatio(name string, lowBoundRatio float64) watcherInterface.Interface {
+	return WatcherExchangeRatioLowerBuyRatio{
+		WatcherBase: watcherInterface.WatcherBase{
+			Name_: name,
+		},
+		LowBoundRatio: lowBoundRatio,
+	}
 }
 
 func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInterface.ResultInterface {

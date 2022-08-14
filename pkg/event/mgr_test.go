@@ -22,10 +22,8 @@ var _ = Describe("SCB Events", func() {
 				return in
 			}
 			event := Timer{
-				watcherInterface: scb.WatcherExchangeRatio{
-					Name_: "scb watcher",
-				},
-				duration: time.Minute * 30,
+				watcherInterface: scb.NewWatcherExchangeRatio("SCB Watcher"),
+				duration:         time.Minute * 30,
 			}
 			isNotify := event.Watcher().Call(context.TODO()).IsNotify()
 			Expect(isNotify).To(Equal(false))
@@ -37,10 +35,8 @@ var _ = Describe("SCB Events", func() {
 				return in
 			}
 			event := Timer{
-				watcherInterface: scb.WatcherExchangeRatio{
-					Name_: "scb watcher",
-				},
-				duration: time.Minute * 30,
+				watcherInterface: scb.NewWatcherExchangeRatio("SCB Watcher"),
+				duration:         time.Minute * 30,
 			}
 			isNotify := event.Watcher().Call(context.TODO()).IsNotify()
 			Expect(isNotify).To(Equal(true))

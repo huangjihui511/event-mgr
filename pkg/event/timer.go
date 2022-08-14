@@ -2,7 +2,7 @@ package event
 
 import (
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
-	watcherInterface "huangjihui511/event-mgr/pkg/watcher/watcher_interface"
+	watcherInterface "huangjihui511/event-mgr/pkg/watcher/interfaces"
 	"sync"
 	"time"
 )
@@ -16,6 +16,13 @@ type Timer struct {
 	watcherInterface watcherInterface.Interface
 	once             sync.Once
 	c                chan interface{}
+}
+
+func NewTimer(d time.Duration, w watcherInterface.Interface) eventInterface.Interface {
+	return Timer{
+		duration:         d,
+		watcherInterface: w,
+	}
 }
 
 func (t Timer) Chan() <-chan interface{} {

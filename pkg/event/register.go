@@ -3,6 +3,7 @@ package event
 import (
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	notifyInterface "huangjihui511/event-mgr/pkg/notify/interfaces"
+	"huangjihui511/event-mgr/pkg/watcher/devops"
 	"huangjihui511/event-mgr/pkg/watcher/scb"
 	"time"
 )
@@ -17,20 +18,8 @@ var (
 
 func registerEvents() {
 	events = []eventInterface.Interface{
-		Timer{
-			watcherInterface: scb.WatcherExchangeRatio{
-				Name_: "scb watcher",
-			},
-			duration: time.Minute * 30,
-		},
-		Timer{
-			watcherInterface: scb.WatcherExchangeRatioLowerBuyRatio{
-				WatcherExchangeRatio: scb.WatcherExchangeRatio{
-					Name_: "scb watcher",
-				},
-				LowBoundRatio: 6.78,
-			},
-			duration: time.Minute,
-		},
+		NewTimer(time.Minute*30, scb.NewWatcherExchangeRatio("SCB Watcher")),
+		NewTimer(time.Minute, scb.NewWatcherExchangeRatioLowerBuyRatio("SCB Low Bound Watcher", 6.78)),
+		NewTimer(time.Second, devops.NewWatcherBorn()),
 	}
 }
