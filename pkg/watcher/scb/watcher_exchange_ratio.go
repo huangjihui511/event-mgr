@@ -3,6 +3,7 @@ package scb
 import (
 	"context"
 	"fmt"
+	"huangjihui511/event-mgr/pkg/logs"
 	"huangjihui511/event-mgr/pkg/utils"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/interfaces"
 )
@@ -25,6 +26,10 @@ func NewWatcherExchangeRatio(name string) watcherInterface.Interface {
 }
 
 func (WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
+	if !isSCBMarketOpen(utils.TimeNow()) {
+		logs.Logger.Info("scb market not open")
+		return watcherInterface.ResultBase{}
+	}
 	ex, err := getSCExchangeRatio(ctx)
 	return watcherInterface.ResultBase{
 		Err:       err,
@@ -49,6 +54,10 @@ func NewWatcherExchangeRatioLowerBuyRatio(name string, lowBoundRatio float64) wa
 }
 
 func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
+	if !isSCBMarketOpen(utils.TimeNow()) {
+		logs.Logger.Info("scb market not open")
+		return watcherInterface.ResultBase{}
+	}
 	ex, err := getSCExchangeRatio(ctx)
 	isNotify := false
 	if ex.BuyRatio < w.LowBoundRatio && isSCBMarketOpen(utils.TimeNow()) {
