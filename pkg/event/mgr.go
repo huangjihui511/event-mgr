@@ -5,15 +5,7 @@ import (
 	"fmt"
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	"huangjihui511/event-mgr/pkg/logs"
-	"huangjihui511/event-mgr/pkg/notify"
-	notifyInterface "huangjihui511/event-mgr/pkg/notify/interfaces"
 )
-
-func init() {
-	notifyEmail = notify.EmailSender{
-		EmailMeta: notifyInterface.EmailMetaQQ,
-	}
-}
 
 func StartMgr(ctx context.Context) {
 	registerEvents()

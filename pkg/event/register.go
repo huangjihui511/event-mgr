@@ -2,6 +2,7 @@ package event
 
 import (
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
+	"huangjihui511/event-mgr/pkg/notify"
 	notifyInterface "huangjihui511/event-mgr/pkg/notify/interfaces"
 	"huangjihui511/event-mgr/pkg/watcher/devops"
 	"huangjihui511/event-mgr/pkg/watcher/scb"
@@ -15,6 +16,12 @@ var (
 		"717655909@qq.com",
 	}
 )
+
+func init() {
+	notifyEmail = notify.EmailSender{
+		EmailMeta: notifyInterface.EmailMetaQQ,
+	}
+}
 
 func registerEvents() {
 	events = []eventInterface.Interface{
