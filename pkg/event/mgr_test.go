@@ -17,7 +17,7 @@ var _ = Describe("SCB Events", func() {
 		})
 		It("Should Not Send Email", func() {
 			utils.TimeNow = func() time.Time {
-				in, err := time.Parse(time.RFC3339, "2022-08-12T9:04:05Z")
+				in, err := time.Parse(time.RFC3339, "2022-08-12T9:04:05+08:00")
 				Expect(err).NotTo(HaveOccurred())
 				return in
 			}
@@ -30,7 +30,7 @@ var _ = Describe("SCB Events", func() {
 		})
 		It("Should Send Email", func() {
 			utils.TimeNow = func() time.Time {
-				in, err := time.Parse(time.RFC3339, "2022-08-12T9:34:05Z")
+				in, err := time.Parse(time.RFC3339, "2022-08-12T9:34:05+08:00")
 				Expect(err).NotTo(HaveOccurred())
 				return in
 			}

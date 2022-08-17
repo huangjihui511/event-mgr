@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"huangjihui511/event-mgr/pkg/logs"
+	"huangjihui511/event-mgr/pkg/utils"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -74,9 +75,9 @@ func getSCExchangeRatio(ctx context.Context) (exchangeRatio ExchangeRatio, err e
 }
 
 func isSCBMarketOpen(now time.Time) bool {
-	weekday := now.Weekday()
-	hour := now.Hour()
-	minute := now.Minute()
+	weekday := now.In(utils.Location).Weekday()
+	hour := now.In(utils.Location).Hour()
+	minute := now.In(utils.Location).Minute()
 	if weekday == time.Saturday || weekday == time.Sunday {
 		return false
 	}
