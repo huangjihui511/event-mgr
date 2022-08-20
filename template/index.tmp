@@ -1,5 +1,6 @@
 <h1>Hello! this is Jihui Event Mgr</h1>
-<p>version:"with dashboard"</p>
+<h2>System</h2>
+<p>version:"fix dashboard"</p>
 <p>System time:{{$.Time}}</p>
 <h2>Events</h2>
 {{ range $index1, $item := $.Items}}
