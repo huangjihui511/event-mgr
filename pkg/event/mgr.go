@@ -5,6 +5,7 @@ import (
 	"fmt"
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	"huangjihui511/event-mgr/pkg/logs"
+	"huangjihui511/event-mgr/pkg/utils"
 )
 
 func StartMgr(ctx context.Context) {
@@ -13,29 +14,38 @@ func StartMgr(ctx context.Context) {
 }
 
 func startEvents(ctx context.Context) {
-	for _, e := range events {
-		go func(ev eventInterface.Interface) {
+	for i, e := range events {
+		go func(ev eventInterface.Interface, index int) {
 			c := ev.Chan()
-			do(ctx, ev)
+			do(ctx, ev, index)
 			for {
 				select {
 				case <-c:
-					do(ctx, ev)
+					do(ctx, ev, index)
 				case <-ctx.Done():
 					logs.Logger.Infof("Stop watcher %s", ev.Watcher().Name())
 					return
 				}
 			}
-		}(e)
+		}(e, i)
 	}
 }
 
-func do(ctx context.Context, ev eventInterface.Interface) {
+func do(ctx context.Context, ev eventInterface.Interface, index int) {
 	logs.Logger.Infof("Call watcher %s", ev.Watcher().Name())
 	r := ev.Watcher().Call(ctx)
+	DashboardData.Lock()
+	defer DashboardData.Unlock()
+	DashboardData.Items[index] = DashboardItem{
+		Name:       ev.Watcher().Name(),
+		Msg:        r.Msg(),
+		IsNotify:   r.IsNotify(),
+		LastCallAt: utils.TimeNow(),
+	}
 	if !r.IsNotify() {
 		return
 	}
+	DashboardData.Items[index].LastNotifyAt = utils.TimeNow()
 	subject := fmt.Sprintf("%v: \"%v\"", ev.Watcher().Name(), r.Subject())
 	for _, t := range targetEmails {
 		err := notifyEmail.Send(t, subject, r.Msg())

@@ -29,4 +29,5 @@ func registerEvents() {
 		NewTimer(time.Minute, scb.NewWatcherExchangeRatioLowerBuyRatio("SCB Low Bound Watcher", 6.78)),
 		NewTimer(time.Second, devops.NewWatcherBorn()),
 	}
+	DashboardData.Items = make([]DashboardItem, len(events))
 }

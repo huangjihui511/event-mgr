@@ -1,2 +1,11 @@
 <h1>Hello! this is Jihui Event Mgr</h1>
-<p>version:"show to mom"</p>
+<p>version:"with dashboard"</p>
+<p>System time:{{$.Time}}</p>
+<h2>Events</h2>
+{{ range $index1, $item := $.Items}}
+<h3>{{$item.Name}}</h3>
+<p>Msg: {{$item.Msg}}</p>
+<p>IsNotify: {{$item.IsNotify}}</p>
+<p>LastCallAt: {{$item.LastCallAt}}</p>
+<p>LastNotifyAt: {{$item.LastNotifyAt}}</p>
+{{end}}

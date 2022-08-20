@@ -3,6 +3,8 @@ package service
 import (
 	"bytes"
 	"html/template"
+	"huangjihui511/event-mgr/pkg/event"
+	"huangjihui511/event-mgr/pkg/utils"
 	"net/http"
 	"os"
 
@@ -21,7 +23,10 @@ func startEcho() {
 		t := template.Must(template.ParseGlob("./template/index.tmp"))
 		b := make([]byte, 0)
 		buf := bytes.NewBuffer(b)
-		t.Execute(buf, nil)
+		event.DashboardData.Lock()
+		event.DashboardData.Time = utils.TimeNow()
+		t.Execute(buf, event.DashboardData)
+		event.DashboardData.Unlock()
 		return c.HTML(http.StatusOK, string(buf.Bytes()))
 	})
 
