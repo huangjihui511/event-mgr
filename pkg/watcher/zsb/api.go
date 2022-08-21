@@ -71,9 +71,9 @@ func getZSExchangeRatio(ctx context.Context) (r ZSBExchangeResult, err error) {
 						p, _ := strconv.ParseFloat(price, 64)
 						switch itrn {
 						case 0:
-							r.USDBuy = p
+							r.USDBuy = p / 100
 						case 2:
-							r.USDSell = p
+							r.USDSell = p / 100
 						}
 					})
 				})
