@@ -10,13 +10,14 @@ import (
 
 func StartMgr(ctx context.Context) {
 	registerEvents()
-	startEvents(ctx)
+	startEvents(ctx, events)
 }
 
-func startEvents(ctx context.Context) {
+func startEvents(ctx context.Context, events []eventInterface.Interface) {
+	initDashboard(events)
 	for i, e := range events {
 		go func(ev eventInterface.Interface, index int) {
-			c := ev.Chan()
+			c := ev.Chan(ctx)
 			do(ctx, ev, index)
 			for {
 				select {
@@ -41,6 +42,9 @@ func do(ctx context.Context, ev eventInterface.Interface, index int) {
 		Msg:        r.Msg(),
 		IsNotify:   r.IsNotify(),
 		LastCallAt: utils.TimeNow(),
+	}
+	if r.Error() != nil {
+		DashboardData.Items[index].Err = r.Error().Error()
 	}
 	if !r.IsNotify() {
 		return

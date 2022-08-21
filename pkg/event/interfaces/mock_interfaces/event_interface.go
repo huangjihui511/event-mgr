@@ -5,6 +5,7 @@
 package mock_interfaces
 
 import (
+	context "context"
 	interfaces "huangjihui511/event-mgr/pkg/watcher/interfaces"
 	reflect "reflect"
 
@@ -35,17 +36,17 @@ func (m *MockInterface) EXPECT() *MockInterfaceMockRecorder {
 }
 
 // Chan mocks base method.
-func (m *MockInterface) Chan() <-chan interface{} {
+func (m *MockInterface) Chan(arg0 context.Context) <-chan interface{} {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Chan")
+	ret := m.ctrl.Call(m, "Chan", arg0)
 	ret0, _ := ret[0].(<-chan interface{})
 	return ret0
 }
 
 // Chan indicates an expected call of Chan.
-func (mr *MockInterfaceMockRecorder) Chan() *gomock.Call {
+func (mr *MockInterfaceMockRecorder) Chan(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Chan", reflect.TypeOf((*MockInterface)(nil).Chan))
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Chan", reflect.TypeOf((*MockInterface)(nil).Chan), arg0)
 }
 
 // Watcher mocks base method.

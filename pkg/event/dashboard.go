@@ -1,6 +1,7 @@
 package event
 
 import (
+	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	"sync"
 	"time"
 )
@@ -17,6 +18,11 @@ type DashboardItem struct {
 	IsNotify     bool
 	LastCallAt   time.Time
 	LastNotifyAt time.Time
+	Err          string
 }
 
 var DashboardData Dashboard
+
+func initDashboard(events []eventInterface.Interface) {
+	DashboardData.Items = make([]DashboardItem, len(events))
+}

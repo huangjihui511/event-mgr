@@ -1,6 +1,7 @@
 package event
 
 import (
+	"context"
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/interfaces"
 	"sync"
@@ -25,12 +26,18 @@ func NewTimer(d time.Duration, w watcherInterface.Interface) eventInterface.Inte
 	}
 }
 
-func (t Timer) Chan() <-chan interface{} {
+func (t Timer) Chan(ctx context.Context) <-chan interface{} {
 	t.once.Do(func() {
-		t.c = make(chan interface{}, 0)
+		t.c = make(chan interface{})
 		go func() {
-			for tt := range time.After(t.duration) {
-				t.c <- tt
+			for {
+				var tc time.Time
+				select {
+				case tc = <-time.After(t.duration):
+					t.c <- tc
+				case <-ctx.Done():
+					return
+				}
 			}
 		}()
 	})

@@ -9,4 +9,5 @@
 <p>IsNotify: {{$item.IsNotify}}</p>
 <p>LastCallAt: {{$item.LastCallAt}}</p>
 <p>LastNotifyAt: {{$item.LastNotifyAt}}</p>
+<p>Error: {{$item.Err}}</p>
 {{end}}

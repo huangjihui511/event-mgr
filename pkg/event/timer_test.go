@@ -1,36 +1,38 @@
 package event
 
 import (
-	"huangjihui511/event-mgr/pkg/watcher/scb"
+	"context"
+	"huangjihui511/event-mgr/pkg/watcher/interfaces/mock_interfaces"
 	"testing"
 	"time"
 
+	"github.com/golang/mock/gomock"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("Timer", func() {
 	Context("Channel", func() {
-		tt := Timer{
-			watcherInterface: scb.WatcherExchangeRatio{},
-			duration:         time.Second * 5,
-		}
-		c := tt.Chan()
-		triggered := false
-		endTimer := time.After(time.Second * 7)
-		for {
-			out := false
-			select {
-			case <-endTimer:
-				out = true
-			case <-c:
-				triggered = true
+		It("Should triggered", func() {
+			watcher := mock_interfaces.NewMockInterface(gomock.NewController(GinkgoT()))
+			triggered := 0
+			watcher.EXPECT().Call(gomock.Any()).Return(nil)
+			c := NewTimer(1*time.Second, watcher).Chan(context.TODO())
+			endTimer := time.After(time.Second * 10)
+			for {
+				end := false
+				select {
+				case <-c:
+					triggered++
+				case <-endTimer:
+					end = true
+				}
+				if end {
+					break
+				}
 			}
-			if out {
-				break
-			}
-		}
-		Expect(triggered).Should(Equal(true))
+			Expect(triggered >= 9).Should(BeTrue())
+		})
 	})
 })
 
