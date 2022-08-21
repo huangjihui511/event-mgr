@@ -36,7 +36,7 @@ var _ = Describe("Timer", func() {
 	})
 })
 
-func TestTimer_Chan(t *testing.T) {
+func TestEvent(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "event")
 }

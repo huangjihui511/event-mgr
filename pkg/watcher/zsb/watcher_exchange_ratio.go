@@ -1,9 +1,8 @@
-package scb
+package zsb
 
 import (
 	"context"
 	"fmt"
-	"huangjihui511/event-mgr/pkg/utils"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/interfaces"
 )
 
@@ -25,11 +24,11 @@ func NewWatcherExchangeRatio(name string) watcherInterface.Interface {
 }
 
 func (WatcherExchangeRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
-	ex, err := getSCExchangeRatio(ctx)
+	ex, err := getZSExchangeRatio(ctx)
 	return watcherInterface.ResultBase{
 		Err:       err,
-		IsNotify_: isSCBMarketOpen(utils.TimeNow()),
-		Msg_:      fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, sell ratio is %v~", ex.BuyRatio, ex.SellRatio),
+		IsNotify_: true,
+		Msg_:      fmt.Sprintf("Hi Boss! The ZSB buy ratio right now is %v, sell ratio is %v~", ex.USDBuy, ex.USDSell),
 		Subject_:  "get new ratio",
 	}
 }
@@ -49,12 +48,12 @@ func NewWatcherExchangeRatioLowerBuyRatio(name string, lowBoundRatio float64) wa
 }
 
 func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
-	ex, err := getSCExchangeRatio(ctx)
+	ex, err := getZSExchangeRatio(ctx)
 	isNotify := false
-	msg := fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, higher than the bound %v~", ex.BuyRatio, w.LowBoundRatio)
-	if ex.BuyRatio < w.LowBoundRatio && isSCBMarketOpen(utils.TimeNow()) {
+	msg := fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, higher than the bound %v~", ex.USDBuy, w.LowBoundRatio)
+	if ex.USDBuy < w.LowBoundRatio {
 		isNotify = true
-		msg = fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, lower than the bound %v~", ex.BuyRatio, w.LowBoundRatio)
+		msg = fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, lower than the bound %v~", ex.USDBuy, w.LowBoundRatio)
 	}
 	return watcherInterface.ResultBase{
 		Err:       err,
