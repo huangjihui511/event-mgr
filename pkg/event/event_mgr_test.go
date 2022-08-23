@@ -3,7 +3,9 @@ package event
 import (
 	"context"
 	eventInterface "huangjihui511/event-mgr/pkg/event/interfaces"
+	"huangjihui511/event-mgr/pkg/event/timer"
 	watcherInterface "huangjihui511/event-mgr/pkg/watcher/interfaces"
+	"testing"
 
 	"huangjihui511/event-mgr/pkg/utils"
 	watcherMockInterface "huangjihui511/event-mgr/pkg/watcher/interfaces/mock_interfaces"
@@ -26,10 +28,7 @@ var _ = Describe("SCB Events", func() {
 				Expect(err).NotTo(HaveOccurred())
 				return in
 			}
-			event := Timer{
-				watcherInterface: scb.NewWatcherExchangeRatio("SCB Watcher"),
-				duration:         time.Minute * 30,
-			}
+			event := timer.NewTimer(time.Minute*30, scb.NewWatcherExchangeRatio("SCB Watcher"))
 			isNotify := event.Watcher().Call(context.TODO()).IsNotify()
 			Expect(isNotify).To(Equal(false))
 		})
@@ -39,10 +38,7 @@ var _ = Describe("SCB Events", func() {
 				Expect(err).NotTo(HaveOccurred())
 				return in
 			}
-			event := Timer{
-				watcherInterface: scb.NewWatcherExchangeRatio("SCB Watcher"),
-				duration:         time.Minute * 30,
-			}
+			event := timer.NewTimer(time.Minute*30, scb.NewWatcherExchangeRatio("SCB Watcher"))
 			isNotify := event.Watcher().Call(context.TODO()).IsNotify()
 			Expect(isNotify).To(Equal(true))
 		})
@@ -63,7 +59,7 @@ var _ = Describe("SCB Events", func() {
 			watcher.EXPECT().Name().Return("test watcher").MaxTimes(100)
 			r := watcher.Call(context.TODO())
 			Expect(r.Error()).NotTo(HaveOccurred())
-			e := NewTimer(1*time.Second, watcher)
+			e := timer.NewTimer(1*time.Second, watcher)
 			startEvents(context.TODO(), []eventInterface.Interface{e})
 			endTimer := time.After(time.Second * 10)
 			<-endTimer
@@ -71,3 +67,8 @@ var _ = Describe("SCB Events", func() {
 		})
 	})
 })
+
+func TestEvent(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "event")
+}
