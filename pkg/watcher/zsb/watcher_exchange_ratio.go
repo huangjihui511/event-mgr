@@ -50,10 +50,10 @@ func NewWatcherExchangeRatioLowerBuyRatio(name string, lowBoundRatio float64) wa
 func (w WatcherExchangeRatioLowerBuyRatio) Call(ctx context.Context) watcherInterface.ResultInterface {
 	ex, err := getZSExchangeRatio(ctx)
 	isNotify := false
-	msg := fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, higher than the bound %v~", ex.USDBuy, w.LowBoundRatio)
+	msg := fmt.Sprintf("Hi Boss! The ZSB buy ratio right now is %v, higher than the bound %v~", ex.USDBuy, w.LowBoundRatio)
 	if ex.USDBuy < w.LowBoundRatio {
 		isNotify = true
-		msg = fmt.Sprintf("Hi Boss! The SCB buy ratio right now is %v, lower than the bound %v~", ex.USDBuy, w.LowBoundRatio)
+		msg = fmt.Sprintf("Hi Boss! The ZSB buy ratio right now is %v, lower than the bound %v~", ex.USDBuy, w.LowBoundRatio)
 	}
 	return watcherInterface.ResultBase{
 		Err:       err,
