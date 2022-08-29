@@ -28,7 +28,7 @@ var (
 	}
 	EmailJihui   = "717655909@qq.com"
 	targetEmails = []string{
-		EmailJihui,
+		// EmailJihui,
 	}
 )
 
